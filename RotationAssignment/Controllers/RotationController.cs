@@ -20,14 +20,14 @@ namespace RotationAssignment.Controllers
         private List<Terminal> _terminalList;
         private List<Cargo> _cargoList;
         private Rotation _rotationList;
-        private Prospect _prospect;
-        private List<TimeStamp> _prospect1;
+        
+        private List<TimeStamp> _prospect;
         private TimeStamp timeStampToAdd;
 
 
 
         public RotationController(List<Cargo> cargoList, Rotation rotationList, 
-            Prospect prospect, List<TimeStamp> prospect1)
+            List<TimeStamp> prospect1)
         {
             //adding Terminals
             _terminalList = new List<Terminal>() {
@@ -39,8 +39,8 @@ namespace RotationAssignment.Controllers
                 _cargoList = cargoList;
             if (rotationList != null)
                 _rotationList = rotationList;
-            _prospect = prospect;
-            _prospect1 = prospect1;
+            
+            _prospect = prospect1;
             
 
 
@@ -67,8 +67,8 @@ namespace RotationAssignment.Controllers
         [Route("getprospects")]
         public List<TimeStamp> GetProspects()
         {
-            if(!_prospect1.Any(t => t.Type == TimeTypes.ATA))
-                _prospect1.Add(new TimeStamp() {Type = TimeTypes.ATA, Description = "Arrival", Time = DateTime.Now });
+            if(!_prospect.Any(t => t.Type == TimeTypes.ATA))
+                _prospect.Add(new TimeStamp() {Type = TimeTypes.ATA, Description = "Arrival", Time = DateTime.Now });
 
             foreach (var terminal in _rotationList.Terminals)
             {
@@ -77,19 +77,19 @@ namespace RotationAssignment.Controllers
                 {
                     Id = terminal.TerminalId, Time = currentTerminal.ATB,  Type = TimeTypes.ATB,  Description = currentTerminal.Name
                 };
-                if (!_prospect1.Contains(timeStampToAdd))
-                    _prospect1.Add(timeStampToAdd);
+                if (!_prospect.Contains(timeStampToAdd))
+                    _prospect.Add(timeStampToAdd);
 
                 timeStampToAdd = new TimeStamp()
                 {
                     Id = terminal.TerminalId, Time = currentTerminal.ATD, Type = TimeTypes.ATD, Description = currentTerminal.Name
                 };
-                if (!_prospect1.Contains(timeStampToAdd))
-                    _prospect1.Add(timeStampToAdd);
+                if (!_prospect.Contains(timeStampToAdd))
+                    _prospect.Add(timeStampToAdd);
 
             }
-            _prospect1.Sort();
-            return _prospect1;
+            _prospect.Sort();
+            return _prospect;
         }
 
         [HttpPost]
@@ -101,8 +101,8 @@ namespace RotationAssignment.Controllers
                 _cargoList.Add(cargo);
                 AddCargoToRotation(cargo);
                 timeStampToAdd = new TimeStamp() { Time = cargo.ATC, Type = TimeTypes.ATC, Description = cargo.Name, Id = cargo.Id };
-                if (!_prospect1.Contains(timeStampToAdd))
-                    _prospect1.Add(timeStampToAdd);
+                if (!_prospect.Contains(timeStampToAdd))
+                    _prospect.Add(timeStampToAdd);
                 return new StatusCodeResult((int)HttpStatusCode.Created);
 
             }
@@ -119,7 +119,7 @@ namespace RotationAssignment.Controllers
             {
                 DeleteCargoFromRotation(_cargoList[cargoToDeleteIndex]);
                 _cargoList.RemoveAt(cargoToDeleteIndex);
-                _prospect1.RemoveAt(_prospect1.FindIndex(s => s.Id == id));
+                _prospect.RemoveAt(_prospect.FindIndex(s => s.Id == id));
 
             }
             else
@@ -172,19 +172,19 @@ namespace RotationAssignment.Controllers
                     var oldTerminalInCargoList = _rotationList.Terminals.Find(t => t.TerminalId == oldTerminalId);
                     var cargoObject = oldTerminalInCargoList.Cargoes.Find(c => c.CargoId == cargo.CargoId);
                     oldTerminalInCargoList.Cargoes.Remove(cargoObject);
-                    _prospect1.Remove(_prospect1.Find(s => s.Id == cargo.CargoId));
+                    _prospect.Remove(_prospect.Find(s => s.Id == cargo.CargoId));
                     //Remove terminal if it's cargo list is empty
                     if (oldTerminalInCargoList.Cargoes.Count() == 0)
                     {
                         _rotationList.Terminals.Remove(oldTerminalInCargoList);
-                        _prospect1.RemoveAll(s => s.Id == oldTerminalId);
+                        _prospect.RemoveAll(s => s.Id == oldTerminalId);
                     }
                         
 
                     //adding cargoes to new places
                     currentTerminalCargoes.Add(new Rotation.Cargo() { CargoId = cargo.CargoId });
                     oldTerminalId = rcterminal.TerminalId;
-                   // _prospect1.Add(new TimeStamp() { Id = cargo.CargoId, })/////////////////////////
+                   // _prospect.Add(new TimeStamp() { Id = cargo.CargoId, })/////////////////////////
                     //cargoesToRemove.Add(cargo);
                 } 
                                 
