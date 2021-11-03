@@ -7,9 +7,24 @@ namespace RotationAssignment.Models
 {
     public class Rotation
     {
-        
-        public string TerminalId { get; set; }
-        public List<string> Cargoes { get; set; }
-        
+        public Rotation()
+        {
+            Terminals = new List<Terminal>();
+        }
+        public List<Terminal> Terminals { get; set; }
+        public class Cargo
+        {
+            public string CargoId { get; set; }
+        }
+
+        public class Terminal
+        {
+            public Terminal()
+            {
+                Cargoes = new List<Cargo>();
+            }
+            public string TerminalId { get; set; }
+            public List<Cargo> Cargoes { get; set; }
+        }
     }
 }

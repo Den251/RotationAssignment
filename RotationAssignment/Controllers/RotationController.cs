@@ -19,14 +19,14 @@ namespace RotationAssignment.Controllers
     {
         private List<Terminal> _terminalList;
         private List<Cargo> _cargoList;
-        private RotationEditor _rotationList;
+        private Rotation _rotationList;
         private Prospect _prospect;
         private List<TimeStamp> _prospect1;
         private TimeStamp timeStampToAdd;
 
 
 
-        public RotationController(List<Cargo> cargoList, RotationEditor rotationList, 
+        public RotationController(List<Cargo> cargoList, Rotation rotationList, 
             Prospect prospect, List<TimeStamp> prospect1)
         {
             //adding Terminals
@@ -55,7 +55,7 @@ namespace RotationAssignment.Controllers
 
         [HttpGet]
         [Route("getrotation")]
-        public RotationEditor GetRotation()
+        public Rotation GetRotation()
         {
             return _rotationList;
         }
@@ -133,13 +133,13 @@ namespace RotationAssignment.Controllers
         
 
         [HttpPut]
-        public IActionResult EditRotation(RotationEditor rotationChanges)
+        public IActionResult EditRotation(Rotation rotationChanges)
         {
             //if terminal used more then once
             if(ValidateIfUsedMoreThenOnce(rotationChanges.Terminals))
                 return BadRequest("Some terminals used more then once");
 
-            List<RotationEditor.Cargo> cargoValidationList = new List<RotationEditor.Cargo>();
+            List<Rotation.Cargo> cargoValidationList = new List<Rotation.Cargo>();
             foreach (var terminal in rotationChanges.Terminals)
             {
                 //if terminal has bad id
@@ -160,7 +160,7 @@ namespace RotationAssignment.Controllers
                 return BadRequest("Some cargoes used more then once");
 
             //rotation editing
-            //List<RotationEditor.Cargo> cargoesToRemove = new List<RotationEditor.Cargo>();
+            //List<Rotation.Cargo> cargoesToRemove = new List<Rotation.Cargo>();
             foreach (var rcterminal in rotationChanges.Terminals)
             {
                 var currentTerminalCargoes = _rotationList.Terminals.Find(c => c.TerminalId == rcterminal.TerminalId).Cargoes;
@@ -182,7 +182,7 @@ namespace RotationAssignment.Controllers
                         
 
                     //adding cargoes to new places
-                    currentTerminalCargoes.Add(new RotationEditor.Cargo() { CargoId = cargo.CargoId });
+                    currentTerminalCargoes.Add(new Rotation.Cargo() { CargoId = cargo.CargoId });
                     oldTerminalId = rcterminal.TerminalId;
                    // _prospect1.Add(new TimeStamp() { Id = cargo.CargoId, })/////////////////////////
                     //cargoesToRemove.Add(cargo);
@@ -206,10 +206,10 @@ namespace RotationAssignment.Controllers
             //if terminal does not exist, then create
             if (!_rotationList.Terminals.Any(c => c.TerminalId == cargo.TerminalId))
             {
-                _rotationList.Terminals.Add(new RotationEditor.Terminal() { TerminalId = cargo.TerminalId });
+                _rotationList.Terminals.Add(new Rotation.Terminal() { TerminalId = cargo.TerminalId });
             }
 
-            _rotationList.Terminals.Find(c => c.TerminalId == cargo.TerminalId).Cargoes.Add(new RotationEditor.Cargo() { CargoId = cargo.Id });
+            _rotationList.Terminals.Find(c => c.TerminalId == cargo.TerminalId).Cargoes.Add(new Rotation.Cargo() { CargoId = cargo.Id });
 
         }
         private void DeleteCargoFromRotation(Cargo cargo)
