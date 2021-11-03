@@ -13,12 +13,12 @@ namespace RotationAssignment.Controllers
     [ApiController]
     public class TodoItemsController : ControllerBase
     {
-        private readonly RotationContext _context;
+        //private readonly RotationContext _context;
 
-        public TodoItemsController(RotationContext context)
-        {
-            _context = context;
-        }
+        //public TodoItemsController(RotationContext context)
+        //{
+        //    _context = context;
+        //}
 
         //// GET: api/TodoItems
         //[HttpGet]

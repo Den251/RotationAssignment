@@ -38,8 +38,9 @@ namespace RotationAssignment
             services.AddSingleton<Terminal>();
             services.AddSingleton<Rotation>();    
             services.AddSingleton<RotationEditor>(); 
-            services.AddSingleton<Prospect>();
-
+            services.AddSingleton<Prospect>(); 
+            services.AddSingleton<List<TimeStamp>>();
+            services.AddSingleton<OrderedDictionary>();
             //services.AddSingleton<Cargo>(); Rotation
             //services.AddDbContext<RotationContext>(opt =>
             //                                   opt.UseInMemoryDatabase("Rotation"));
