@@ -37,16 +37,8 @@ namespace RotationAssignment
             services.AddSingleton<List<Cargo>>();
             services.AddSingleton<Terminal>();
             services.AddSingleton<Rotation>();    
-            services.AddSingleton<Prospect>(); 
             services.AddSingleton<List<TimeStamp>>();
-            services.AddSingleton<OrderedDictionary>();
-            //services.AddSingleton<Cargo>(); Rotation
-            //services.AddDbContext<RotationContext>(opt =>
-            //                                   opt.UseInMemoryDatabase("Rotation"));
-            //services.AddSwaggerGen(c =>
-            //{
-            //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "RotationAssignment", Version = "v1" });
-            //});
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,13 +47,9 @@ namespace RotationAssignment
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                //app.UseSwagger();
-                //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RotationAssignment v1"));
+                
             }
-            //var config = new HttpConfiguration();
-            //config.MapHttpAttributeRoutes();
-
-
+            
             app.UseHttpsRedirection();
             
             app.UseRouting();
