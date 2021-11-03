@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RotationAssignment.Models;
 using System.Web.Http;
+using System.Collections.Specialized;
 
 namespace RotationAssignment
 {
@@ -32,8 +33,15 @@ namespace RotationAssignment
         {
             //services.AddSingleton()
             services.AddControllers();
-            services.AddDbContext<RotationContext>(opt =>
-                                               opt.UseInMemoryDatabase("Rotation"));
+            services.AddSingleton<List<Terminal>>();
+            services.AddSingleton<List<Cargo>>();
+            services.AddSingleton<Terminal>();
+            services.AddSingleton<Rotation>();
+            services.AddSingleton<OrderedDictionary>();
+
+            //services.AddSingleton<Cargo>(); Rotation
+            //services.AddDbContext<RotationContext>(opt =>
+            //                                   opt.UseInMemoryDatabase("Rotation"));
             //services.AddSwaggerGen(c =>
             //{
             //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "RotationAssignment", Version = "v1" });
