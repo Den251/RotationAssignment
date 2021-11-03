@@ -36,8 +36,9 @@ namespace RotationAssignment
             services.AddSingleton<List<Terminal>>();
             services.AddSingleton<List<Cargo>>();
             services.AddSingleton<Terminal>();
-            services.AddSingleton<Rotation>();
-            services.AddSingleton<OrderedDictionary>();
+            services.AddSingleton<Rotation>();    
+            services.AddSingleton<RotationEditor>(); 
+            services.AddSingleton<Prospect>();
 
             //services.AddSingleton<Cargo>(); Rotation
             //services.AddDbContext<RotationContext>(opt =>

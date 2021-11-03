@@ -17,12 +17,13 @@ namespace RotationAssignment.Controllers
     {
         private List<Terminal> terminalList;
         private List<Cargo> _cargoList;
-        private OrderedDictionary _rotationList;
+        private RotationEditor _rotationList;
+        private Prospect _prospect;
         
 
-        public RotationController(List<Cargo> cargoList, OrderedDictionary rotationList)
+        public RotationController(List<Cargo> cargoList, RotationEditor rotationList, Prospect prospect)
         {
-            //adding terminals
+            //adding Terminals
             terminalList = new List<Terminal>() {
                 new Terminal() { Id = "0175d159-f61f-40b9-aaf7-967dbe461349", Name = "FirstTerminal", ATB = DateTime.Now, ATD = DateTime.Now },
                 new Terminal() { Id = "02ec54f7-8a50-454f-9503-62eeb2f3f4d0", Name = "SecondTerminal", ATB = DateTime.Now, ATD = DateTime.Now },
@@ -32,6 +33,8 @@ namespace RotationAssignment.Controllers
                 _cargoList = cargoList;
             if (rotationList != null)
                 _rotationList = rotationList;
+            _prospect = prospect;
+            
                        
         }
                 
@@ -44,9 +47,32 @@ namespace RotationAssignment.Controllers
 
         [HttpGet]
         [Route("getrotation")]
-        public OrderedDictionary GetRotation()
+        public RotationEditor GetRotation()
         {
             return _rotationList;
+        }
+        
+
+        [HttpGet]
+        [Route("getprospects")]
+        public Prospect GetProspects()
+        {
+            _prospect.ATA = DateTime.Now;
+            foreach(var terminal in _rotationList.Terminals)
+            {
+                Terminal terminalInfo = terminalList.Find(t => t.Id == terminal.TerminalId);
+                List<Cargo> cargoInfo = _cargoList.FindAll(t => t.TerminalId == terminal.TerminalId);
+                _prospect.Terminals.Add(new Prospect.TerminalInProspect() {
+                    Id = terminal.TerminalId, 
+                    Name = terminalInfo.Name,
+                    ATB = terminalInfo.ATB,
+                    ATD = terminalInfo.ATD,
+                    Cargoes = cargoInfo
+                });
+            }
+            
+
+            return _prospect;
         }
 
         [HttpPost]
@@ -86,43 +112,55 @@ namespace RotationAssignment.Controllers
         }
         private void AddCargoToRotation(Cargo cargo)
         {
-            if (!_rotationList.Contains(cargo.TerminalId))
+            //if(_rotationList.Terminals== null)
+            //{
+            //    _rotationList.Terminals = new List<RotationEditor.Terminal>();
+            //}
+            if (!_rotationList.Terminals.Any(c => c.TerminalId == cargo.TerminalId))
             {
-                _rotationList.Add(cargo.TerminalId, new List<string>());
+                _rotationList.Terminals.Add(new RotationEditor.Terminal() { TerminalId = cargo.TerminalId });
             }
-            (_rotationList[cargo.TerminalId] as List<string>).Add(cargo.Id);
+            
+            _rotationList.Terminals.Find(c => c.TerminalId == cargo.TerminalId).Cargoes.Add(new RotationEditor.Cargo() { CargoId = cargo.Id });
+            
         }
         private void DeleteCargoFromRotation(Cargo cargo)
         {
-            if (_rotationList.Contains(cargo.TerminalId))
+            if (_rotationList.Terminals.Any(c => c.TerminalId == cargo.TerminalId))
             {
-                _rotationList.Remove(cargo.TerminalId);
+                _rotationList.Terminals.Find(c => c.TerminalId == cargo.TerminalId).Cargoes.RemoveAll(c => c.CargoId == cargo.Id);
             }
         }
 
         [HttpPut]
         public StatusCodeResult EditRotation(RotationEditor rotationChanges)
         {
-            foreach(var terminal in rotationChanges.terminals)
+            foreach(var terminal in rotationChanges.Terminals)
             {
-                if (_rotationList.Contains(terminal.TerminalId))
+                if (_rotationList.Terminals.Any(c => c.TerminalId == terminal.TerminalId))
                 {
+                    _rotationList.Terminals.Find(c => c.TerminalId == terminal.TerminalId).Cargoes.Clear();
                     foreach (var cargo in terminal.Cargoes)
                     {
-                        (_rotationList[terminal.TerminalId] as List<string>).Add(cargo.CargoId);
+                        _rotationList.Terminals.Find(c => c.TerminalId == terminal.TerminalId).Cargoes.Add(new RotationEditor.Cargo() { CargoId = cargo.CargoId });
+                        ///////////_cargoList.Add();
                     }
                 }
                 else
                 {
-                    _rotationList.Add(terminal.TerminalId, terminal.Cargoes);
+                   
+                    _rotationList.Terminals.Add(terminal);
+                                       
+
                 }
                 
                                 
             }
-            return BadRequest();
+            return Ok();
 
 
         }
+        
         // GET: api/TodoItems/5
         //[HttpGet("{id}")]
         //public async Task<ActionResult<Cargo>> GetCargo(string id)
