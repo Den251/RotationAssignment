@@ -11,20 +11,7 @@ namespace RotationAssignment.Models
         public DateTime? Time { get; set; }
         public string Type { get; set; }
         public string Description { get; set; }
-
-        //public int CompareTo(object obj)
-        //{
-        //    TimeStamp timeStamp = obj as TimeStamp;
-        //    if (this.Time.HasValue && timeStamp.Time.HasValue)
-        //    {
-        //        var thisTime = (DateTime)this.Time;
-        //        var timeStampTime = (DateTime)timeStamp.Time;
-        //        return thisTime.CompareTo(timeStampTime);
-        //    }
-        //    return 0;
-        //
-        //}
-
+          
         public int CompareTo(TimeStamp obj)
         {
             if (this.Time.HasValue && obj.Time.HasValue)
