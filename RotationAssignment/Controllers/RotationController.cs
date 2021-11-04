@@ -39,7 +39,6 @@ namespace RotationAssignment.Controllers
                 _prospect = prospect;
             
 
-
         }
                 
         
@@ -204,14 +203,7 @@ namespace RotationAssignment.Controllers
                             _prospect.RemoveAll(s => s.Id == oldTerminalId.TerminalId);
                         }
                     }
-                    //if (oldTerminalCargo != null)
-                    //{
-                    //    foreach(var item in oldTerminalCargo)
-                    //        _prospect.Remove(_prospect.Find(s => s.Id == item.Id));
-                    //}
-
-
-
+                    
 
                         //adding cargoes to new places
                         currentTerminalCargoes.Add(new Rotation.Cargo() { CargoId = cargo.CargoId });
@@ -263,84 +255,6 @@ namespace RotationAssignment.Controllers
                     _rotationList.Terminals.Remove(currentTerminal);
             }
         }
-
-        // GET: api/TodoItems/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Cargo>> GetCargo(string id)
-        //{
-        //    var cargo = await _context.Cargoes.FindAsync(id);
-        //
-        //    if (cargo == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //
-        //    return cargo; 
-        //}
-        //
-        //
-        //[Route("getrotation")]
-        //public async Task<ActionResult<IEnumerable<Terminal>>> GetRotation()
-        //{
-        //    return await _context.Terminals.ToListAsync();
-        //}
-        //
-        //// POST: api/TodoItems
-        //[HttpPost]
-        //public async Task<ActionResult<Cargo>> PostCargo(Cargo cargo)
-        //{
-        //    if (CargoExists(cargo.Id))
-        //        return BadRequest("Cargo already used in this rotation");
-        //    _context.Cargoes.Add(cargo);
-        //    await _context.SaveChangesAsync();
-        //
-        //    //return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
-        //    return CreatedAtAction(nameof(GetCargo), new { id = cargo.Id }, cargo);
-        //}
-        //
-        //[Route("postcargolist")]
-        //public async Task<ActionResult<Cargo>> PostCargoList(List<Cargo> cargo)
-        //{
-        //    _context.Cargoes.AddRange(cargo);
-        //    await _context.SaveChangesAsync();
-        //
-        //    //return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
-        //    return CreatedAtAction(nameof(GetCargo), new { id = cargo.Last().Id }, cargo); ;
-        //}
-        //
-        //// PUT: api/TodoItems/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutTodoItem(string id, Cargo cargo)
-        //{
-        //    if (id != cargo.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-        //
-        //    _context.Entry(cargo).State = EntityState.Modified;
-        //
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!CargoExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-        //
-        //    return NoContent();
-        //}
-        //private bool CargoExists(string id)
-        //{
-        //    return _context.Cargoes.Any(c => c.Id == id);
-        //}
+        
     }
 }
